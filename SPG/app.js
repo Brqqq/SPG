@@ -1,13 +1,10 @@
 'use strict';
 
 const ImageManager = require('./ImageManager');
-const backgroundChangeDelay = 3000; // milliseconds
-const imageManager = new ImageManager();
 const wallpaper = require('wallpaper');
+const backgroundChangeDelay = 3000; // milliseconds
 
-const init = function () {
-
-}
+const imageManager = new ImageManager();
 
 const tick = function () {
     setInterval(() => {

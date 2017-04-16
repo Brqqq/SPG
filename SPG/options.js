@@ -1,4 +1,6 @@
-﻿const options = {
+﻿'use strict';
+
+const options = {
     subreddits: ['MotorcyclePorn', 'spaceporn'],
     minResolution: {
         minWidth: 2000,

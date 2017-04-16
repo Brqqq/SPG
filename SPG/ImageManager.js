@@ -16,7 +16,6 @@ class ImageManager {
     }
 
     getNextImageURL(callback) {
-        //callback(url);
         if (this._currentSubredditData === null) {
             this.loadNextSubredditData(() => this.getNextImageURL(callback));
             return;
@@ -64,13 +63,26 @@ class ImageManager {
 
     downloadImage(url, callback) {
         request.head(url, function (err, res, body) {
+            if (error) {
+                console.log(`Error downloading image from url: ${url}, error: ${error}, response: ${response}`);
+                return;
+            }
             request(url).pipe(fs.createWriteStream('image.png')).on('close', callback);
         });
     }
 
     getJSON(subreddit, callback) {
-        request(`https://www.reddit.com/r/${subreddit}.json`, function (error, response, body) {
-            var result = JSON.parse(body);
+        request(`https://www.reddit.com/r/${subreddit}/.json?limit=60`, function (error, response, body) {
+            if (error) {
+                console.log(`Error retrieving info from subreddit: ${subreddit}, error: ${error}, response: ${response}`);
+                return;
+            }
+            let result;
+            try {
+                result = JSON.parse(body);
+            } catch (e) {
+                console.log(`Error parsing JSON from subreddit: ${subreddit}, error: ${error}, response: ${response}, body: ${body}`);
+            }
             callback(result);
         });
     };
