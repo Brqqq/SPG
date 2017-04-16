@@ -2,7 +2,7 @@
 
 const ImageManager = require('./ImageManager');
 const wallpaper = require('wallpaper');
-const backgroundChangeDelay = 3000; // milliseconds
+const options = require('./options');
 
 const imageManager = new ImageManager();
 
@@ -11,7 +11,7 @@ const tick = function () {
         imageManager.getNextImageURL(() => {
             wallpaper.set('image.png');
         });
-    }, backgroundChangeDelay);
+    }, options.delay * 1000 * 60);
     
 }
 
