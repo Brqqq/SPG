@@ -5,7 +5,11 @@ Should supposedly work for Windows, Linux and Mac
 
 ## Settings
 
-In the 'options.js' file, you may specify which subreddits to use and how often it should retrieve a new wallpaper
+Modify the 'config.json' file for settings.
+- subreddits : Which subreddits to look in for pictures
+- maxResults : How many results it will look at from each subreddit
+- minResolution : The minimum resolution requires for images
+- delay : Minutes until the next wallpaper is loaded
 
 ## Running
 

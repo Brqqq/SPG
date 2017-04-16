@@ -1,0 +1,9 @@
+{
+  "subreddits": [ "spaceporn" ],
+  "maxResults": 60,
+  "minResolution": {
+    "minWidth": 2000,
+    "minHeight": 2000
+  },
+  "delay": 2
+}

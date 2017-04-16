@@ -1,14 +1,14 @@
 ﻿'use strict';
 
-const options = require('./options');
-const https = require('https');
+
 const fs = require('fs');
 const stream = require('stream').Transform;
 const request = require('request');
 
 class ImageManager {
-    constructor(callback) {
-        this._subredditCount = options.subreddits.length;
+    constructor(config, callback) {
+        this._config = config;
+        this._subredditCount = this._config.subreddits.length;
         this._nextSubredditIndex = 0;
         this._currentSubredditData = null;
         this._suitableImages = null;
@@ -36,14 +36,14 @@ class ImageManager {
             if (entry.preview === undefined || entry.preview.images === undefined || entry.preview.images.length === 0) continue; // Make sure it's a proper image that we can use'
 
             const image = entry.preview.images[0].source;
-            if (image.width < options.minResolution.minWidth || image.height < options.minResolution.minHeight) continue; // Check the resolutions
+            if (image.width < this._config.minResolution.minWidth || image.height < this._config.minResolution.minHeight) continue; // Check the resolutions
 
             this._suitableImages.push(image.url);
         }
     }
 
     loadNextSubredditData(callback) {
-        const subredditName = options.subreddits[this._nextSubredditIndex];
+        const subredditName = this._config.subreddits[this._nextSubredditIndex];
         this._nextSubredditIndex++;
         if (this._nextSubredditIndex >= this._subredditCount)
             this._nextSubredditIndex = 0;
@@ -65,7 +65,7 @@ class ImageManager {
     }
 
     getJSON(subreddit, callback) {
-        request(`https://www.reddit.com/r/${subreddit}/.json?limit=${options.maxResults}`, function (error, response, body) {
+        request(`https://www.reddit.com/r/${subreddit}/.json?limit=${this._config.maxResults}`, function (error, response, body) {
             if (error) {
                 console.log(`Error retrieving info from subreddit: ${subreddit}, error: ${error}, response: ${response}`);
                 return;
