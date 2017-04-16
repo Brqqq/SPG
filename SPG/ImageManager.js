@@ -62,7 +62,7 @@ class ImageManager {
     }
 
     downloadImage(url, callback) {
-        request.head(url, function (err, res, body) {
+        request.head(url, function (error, res, body) {
             if (error) {
                 console.log(`Error downloading image from url: ${url}, error: ${error}, response: ${response}`);
                 return;
@@ -81,7 +81,7 @@ class ImageManager {
             try {
                 result = JSON.parse(body);
             } catch (e) {
-                console.log(`Error parsing JSON from subreddit: ${subreddit}, error: ${error}, response: ${response}, body: ${body}`);
+                console.log(`Error parsing JSON from subreddit: ${subreddit}, exception: ${e}, response: ${response}, body: ${body}`);
             }
             callback(result);
         });
