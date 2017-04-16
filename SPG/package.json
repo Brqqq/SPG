@@ -1,0 +1,12 @@
+{
+  "name": "spg",
+  "version": "0.0.0",
+  "description": "SPG",
+  "main": "app.js",
+  "author": {
+    "name": "Burak"
+  },
+  "dependencies": {
+    "wallpaper": "^2.4.0"
+  }
+}
