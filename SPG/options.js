@@ -2,6 +2,7 @@
 
 const options = {
     subreddits: ['MotorcyclePorn', 'spaceporn'],
+    maxResults: 60, // determines how many results of each subreddit it will look through for wallpapers
     minResolution: {
         minWidth: 2000,
         minHeight: 2000

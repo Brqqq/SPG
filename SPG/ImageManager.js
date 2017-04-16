@@ -65,7 +65,7 @@ class ImageManager {
     }
 
     getJSON(subreddit, callback) {
-        request(`https://www.reddit.com/r/${subreddit}/.json?limit=10`, function (error, response, body) {
+        request(`https://www.reddit.com/r/${subreddit}/.json?limit=${options.maxResults}`, function (error, response, body) {
             if (error) {
                 console.log(`Error retrieving info from subreddit: ${subreddit}, error: ${error}, response: ${response}`);
                 return;
