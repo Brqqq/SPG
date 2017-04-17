@@ -10,6 +10,7 @@ Modify the 'config.json' file for settings.
 - maxResults : How many results it will look at from each subreddit
 - minResolution : The minimum resolution requires for images
 - delay : Minutes until the next wallpaper is loaded
+- randomized : If set to true, it will take all the images from all the subreddits combined, shuffle them and go through them one by one
 
 ## Running
 

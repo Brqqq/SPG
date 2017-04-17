@@ -1,9 +1,10 @@
 {
-  "subreddits": [ "spaceporn" ],
+  "subreddits": [ "skyporn", "weatherporn", "lavaporn", "earthporn", "spaceporn" ],
   "maxResults": 60,
   "minResolution": {
     "minWidth": 2000,
     "minHeight": 2000
   },
-  "delay": 2
+  "delay": 1,
+  "randomized": true
 }

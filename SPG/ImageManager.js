@@ -1,6 +1,5 @@
 ﻿'use strict';
 
-
 const fs = require('fs');
 const stream = require('stream').Transform;
 const request = require('request');
@@ -10,7 +9,6 @@ class ImageManager {
         this._config = config;
         this._subredditCount = this._config.subreddits.length;
         this._nextSubredditIndex = 0;
-        this._currentSubredditData = null;
         this._suitableImages = null;
 
         this.loadNextSubredditData(callback);
@@ -21,15 +19,13 @@ class ImageManager {
             this.loadNextSubredditData(() => this.getNextImageURL(callback));
             return;
         }
+
         const url = this._suitableImages.shift(); // essentially a dequeue action
         this.downloadImage(url, callback);
     }
     
 
-    findSuitableImages() {
-        this._suitableImages = [];
-        const data = this._currentSubredditData;
-
+    findSuitableImages(data) {
         for (let i = 0; i < data.length; i++) {
             const entry = data[i].data;
             if (entry.is_self === true) continue; // No self posts allowed
@@ -43,15 +39,32 @@ class ImageManager {
     }
 
     loadNextSubredditData(callback) {
-        const subredditName = this._config.subreddits[this._nextSubredditIndex];
-        this._nextSubredditIndex++;
-        if (this._nextSubredditIndex >= this._subredditCount)
-            this._nextSubredditIndex = 0;
-        this.getJSON(subredditName, (jsonResult) => {
-            this._currentSubredditData = jsonResult.data.children;
-            this.findSuitableImages();
-            callback();
-        })
+        this._suitableImages = [];
+
+        if (this._config.randomized) { // Load all subreddits
+            let counter = 0; // Counter to keep track of if all the requests have been finished
+            for (let i = 0; i < this._config.subreddits.length; i++) {
+                const subredditName = this._config.subreddits[i];
+                this.getJSON(subredditName, (jsonResult) => {
+                    this.findSuitableImages(jsonResult.data.children);
+                    counter++;
+                    if (counter === this._config.subreddits.length) { // This is the last one
+                        this.shuffle(this._suitableImages); // Randomize the entire list first
+                        callback();
+                    }
+                });
+            }
+        }
+        else { // Load the first next subreddit only, because it's not randomized
+            const subredditName = this._config.subreddits[this._nextSubredditIndex];
+            this._nextSubredditIndex++;
+            if (this._nextSubredditIndex >= this._subredditCount)
+                this._nextSubredditIndex = 0;
+            this.getJSON(subredditName, (jsonResult) => {
+                this.findSuitableImages(jsonResult.data.children);
+                callback();
+            });
+        }
     }
 
     downloadImage(url, callback) {
@@ -78,7 +91,14 @@ class ImageManager {
             }
             callback(result);
         });
-    };
+    }
+
+    shuffle(a) {
+        for (let i = a.length; i; i--) {
+            let j = Math.floor(Math.random() * i);
+            [a[i - 1], a[j]] = [a[j], a[i - 1]];
+        }
+    }
 }
 
 module.exports = ImageManager;
